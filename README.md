@@ -22,12 +22,26 @@ Rebasing jest procesem przenoszenia lub łączenia sekwencji commitów w nowy co
 Rebasing to zmiana podstawy brancha z jednego commitu na inny, tak aby wyglądało to na stworzenie swojego brancha z innego commitu. Sam Git osiąga to poprzez tworzenie nowych commitów i zaaplikowanie ich do określonej bazy. Bardzo ważne jest, aby zrozumieć, że nawet jeśli branch wygląda tak samo, to składa się z zupełnie nowych commitów.
 
 Podstawowym powodem rebasingu jest utrzymanie liniowej historii projektu. Na przykład rozważ sytuację, w której główny branch rozwinął się od czasu, gdy zacząłeś pracować nad feature branchem. Ogólnie, chciałbyś uzyskać najnowsze aktualizacje głównego brancha w swoim feature branchu, ale chcesz zachować czystą historię, aby wyglądało na to, że pracowałeś z najnowszego głównego brancha. Daje to późniejszą korzyść w postaci czystego merge twojego feature brancha z powrotem do main brancha. Dlaczego chcemy utrzymywać "czystą historię"? Korzyści z posiadania czystej historii stają się namacalne w momencie badania histori Twojego repozytorium podczas przeprowadzanej regresji. ~ by Atlassian
+bashCopy# Wykonanie rebase brancha feature na main
+```git
+git checkout feature
+git rebase main
+
+# Interaktywny rebase - pozwala na modyfikację historii commitów
+git rebase -i HEAD~3  # Ostatnie 3 commity
+```
 
 ### Force push
 
 Użycie `force push` powoduje że historia commitów na zdalnym serwerze zostanie siłą nadpisana twoją własną, lokalną historią. Jest to dość niebezpieczny proces, ponieważ bardzo łatwo jest nadpisać (a tym samym stracić) commity od swoich kolegów.
 
+```
+# Force push (należy używać ostrożnie!)
+git push --force
 
+# Bezpieczniejsza wersja force push
+git push --force-with-lease  # Sprawdza czy nie nadpiszemy cudzych zmian
+```
 ### Feature Branche
 
 Podstawową ideą feature branchy jest to, że cały rozwój funkcjonalności powinien odbywać się na dedykowanym branchu zamiast na mainie. Taka enkapsulacja ułatwia wielu programistom pracę nad daną funkcjonalnością bez naruszania głównej bazy kodu. Oznacza to również, że główna gałąź nigdy nie będzie zawierać uszkodzonego kodu, co jest ogromną zaletą dla środowisk ciągłej integracji.
@@ -37,7 +51,19 @@ Podstawową ideą feature branchy jest to, że cały rozwój funkcjonalności po
 
 ![issues](https://static-assets.codecademy.com/Courses/learn-git-github/project-management/issues-board-docs.png
 )
+```
+# Tworzenie nowego feature brancha
+git checkout -b feature/nazwa-funkcjonalnosci
 
+# Przełączanie się między branchami
+git checkout nazwa-brancha
+
+# Pobranie zmian z remote
+git fetch origin
+
+# Aktualizacja brancha lokalnego
+git pull origin nazwa-brancha
+```
 ### Pull Request
 
 Pull request jest formą poinformowania osób zaangażowanych w projekt o nowych przygotowanych przez Ciebie zmianach oraz prośbą o zaakceptowanie tych zmian.
@@ -54,7 +80,7 @@ Code Review, jest aktem świadomego i systematycznego publikowania kodu do oceny
 1. Dobierzcie się w zespoły
 2. Jako zespół stworzcie wspolnego brancha, który będzie pełnił rolę waszego maina. Nazwa brancha powinna być nazwą waszego zespołu
 3. Stwórz nowe issue na githubie a w nim:
-   1. Ustaw jego tytuł w formacie: `<nr indeksu> new feature enhacement`
+   1. Ustaw jego tytuł w formacie: `<nr z dziennika> new feature enhacement`
    2. Dodaj komentarz opisujący: "add my student index number to the hello.md on the line 3"
    3. Przydziel siebie w Assignies
    4. Przydziel label enhacement, jeśli go nie ma - stwórz nowy
